@@ -1,0 +1,79 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Tahoma, arial;
+}
+
+.container {
+    margin: 20px auto;
+    width: 1000px;
+}
+
+.row {
+    display: flex;
+}
+
+hr {
+    border: 1px solid #EEE;
+}
+
+.game-info {
+    display: flex;
+}
+
+.game-info .game-name {
+    flex: 1;
+}
+
+.game-info .category {
+    flex: 1;
+    text-align: right;
+}
+
+.game-info .category span {
+    text-transform: capitalize;
+    color: #e91e63;
+    font-weight: bold;
+}
+.hangman-draw{
+    flex: 1;
+    background-color: #f8f8f8;
+    padding: 20px;
+    height: 324px;
+}
+.hangman-draw .the-draw{
+    width: 60px;
+    height: 280px;
+    border-bottom: 4px solid #222;
+    position: relative;
+    margin: auto;
+}
+.hangman-draw .the-stand::before{
+    content: '';
+    position: absolute;
+    width: 4px;
+    background-color: #222;
+    height: 100%;
+    left: 50%;
+    margin-left: -2px;
+}
+.hangman-draw .the-hang::before{
+    content: '';
+    position: absolute;
+    height: 4px;
+    background-color: #222;
+    width: 104px;
+    left: 30px;
+    top: 10px;
+}
+.hangman-draw .the-hang::after{
+    content: '';
+    position: absolute;
+    width: 4px;
+    background-color: #222;
+    height: 30px;
+    left: 130px;
+    top: 15px;
+}
