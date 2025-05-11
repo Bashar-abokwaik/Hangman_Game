@@ -49,8 +49,10 @@ hr {
   border-bottom: 4px solid #222;
   position: relative;
   margin: auto;
+  left: -60px;
+  display: none;
 }
-.hangman-draw .the-stand::before {
+.hangman-draw .the-stand {
   content: "";
   position: absolute;
   width: 4px;
@@ -58,6 +60,10 @@ hr {
   height: 100%;
   left: 50%;
   margin-left: -2px;
+  display: none;
+}
+.hangman-draw .the-hang{
+    display: none;
 }
 .hangman-draw .the-hang::before {
   content: "";
@@ -85,6 +91,7 @@ hr {
   left: 97px;
   top: 45px;
   border: 4px dashed #222;
+  display: none;
 }
 .hangman-draw .the-man .head {
   width: 50px;
@@ -94,6 +101,7 @@ hr {
   position: absolute;
   left: 107px;
   top: 55px;
+  display: none;
 }
 .hangman-draw .the-man .body {
   position: absolute;
@@ -102,6 +110,7 @@ hr {
   height: 110px;
   top: 102px;
   left: 130px;
+  display: none;
 }
 .hangman-draw .the-man .hands::before {
   content: "";
@@ -112,6 +121,7 @@ hr {
   left: 85px;
   top: 150px;
   transform: rotate(30deg);
+  display: none;
 }
 .hangman-draw .the-man .hands::after {
   content: "";
@@ -122,6 +132,7 @@ hr {
   left: 130px;
   top: 150px;
   transform: rotate(-30deg);
+  display: none;
 }
 .hangman-draw .the-man .legs::before {
   content: "";
@@ -132,6 +143,7 @@ hr {
   left: 85px;
   top: 220px;
   transform: rotate(-30deg);
+  display: none;
 }
 .hangman-draw .the-man .legs::after {
   content: "";
@@ -142,7 +154,33 @@ hr {
   left: 130px;
   top: 220px;
   transform: rotate(30deg);
+  display: none;
 }
+.hangman-draw.wrong-1 .the-draw{
+    display: block;
+}
+.hangman-draw.wrong-2 .the-stand{
+    display: block;
+}
+.hangman-draw.wrong-3 .the-hang{
+    display: block;
+}
+.hangman-draw.wrong-4 .the-rope{
+    display: block;
+}
+.hangman-draw.wrong-5 .head{
+    display: block;
+}
+.hangman-draw.wrong-6 .body{
+    display: block;
+}
+.hangman-draw.wrong-7 .hands::before,.hangman-draw.wrong-7 .hands::after{
+    display: block;
+}
+.hangman-draw.wrong-8 .legs::before, .hangman-draw.wrong-8 .legs::after{
+    display: block;
+}
+
 .letters {
   flex: 1;
   /* background-color:#f8f8f8; */
@@ -198,4 +236,10 @@ hr {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+}
+
+.letters .letter-box.clicked {
+  background-color: #222;
+  opacity: 0.2;
+  pointer-events: none;
 }

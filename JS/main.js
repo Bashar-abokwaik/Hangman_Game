@@ -109,4 +109,56 @@ lettersAndSpace.forEach((letter) => {
   lettersGuessContainer.appendChild(emptySpan);
 });
 
-console.log(randomValueName);
+//Select Guess Spans
+let guessSpans = document.querySelectorAll(".letters-guess span")
+
+//Set Wrong Attempts
+let wrongAttempts = 0;
+
+//Select The Draw Element
+let theDraw = document.querySelector(".hangman-draw");
+
+// Hedle Clicking On Letters 
+document.addEventListener("click", (e) => {
+  
+// Set The Chose Status
+let theStatus = false;
+
+  if (e.target.className === "letter-box") {
+    e.target.classList.add("clicked");
+    //Get Clicked Letter 
+    let theClickedLetter = e.target.innerHTML.toLowerCase();
+    //The Chosen Word
+    let theChoseWord = Array.from(randomValueName.toLowerCase());
+    theChoseWord.forEach((wordLetter, WordIndex) => {
+      //If The Clicked Letter Equal To One Of The Chosen Word Letter 
+      if (theClickedLetter == wordLetter) {
+        //Set Status To Correct 
+        theStatus = true;
+        //Loop On All Guess Spans
+        guessSpans.forEach((span, SpanIndex) => {
+          if (WordIndex === SpanIndex) {
+            span.innerHTML = wordLetter;
+          }
+        });
+      }
+    });
+    //If Letter Is Wrong
+    if(theStatus !== true){
+      // Increase The Wrong Attempts
+      wrongAttempts++;
+      //Add Class Wrong On The Draw Element 
+      theDraw.classList.add(`wrong-${wrongAttempts}`);
+      
+      // Play Fail Sound
+      document.getElementById("fail").play();
+      if (wrongAttempts === 8) {
+        // enGame();
+        lettersContainer.classList.add("finished");
+      }
+    }else{
+            // Play Success Sound
+            document.getElementById("success").play();
+    }
+  }
+})
