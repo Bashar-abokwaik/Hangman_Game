@@ -98,13 +98,11 @@ let lettersAndSpace = Array.from(randomValueName);
 lettersAndSpace.forEach((letter) => {
   //Create Empty Span
   let emptySpan = document.createElement("span");
-
   //If Letter is Space
   if (letter === " ") {
     // Add Class To The Span
     emptySpan.className = "With-Space";
   }
-
   //Append Span To The Letters Guess Cotainer
   lettersGuessContainer.appendChild(emptySpan);
 });
@@ -139,6 +137,7 @@ let theStatus = false;
         guessSpans.forEach((span, SpanIndex) => {
           if (WordIndex === SpanIndex) {
             span.innerHTML = wordLetter;
+            span.classList.add("done")
           }
         });
       }
@@ -153,12 +152,66 @@ let theStatus = false;
       // Play Fail Sound
       document.getElementById("fail").play();
       if (wrongAttempts === 8) {
-        // enGame();
+        enGame();
         lettersContainer.classList.add("finished");
       }
     }else{
             // Play Success Sound
             document.getElementById("success").play();
+            let doneSpan = document.querySelectorAll(".letters-guess .done")
+            if (doneSpan.length === randomValueName.length) {
+              won();
+            }
     }
   }
 })
+
+// End Game Function 
+function enGame(){
+  //Create Popup Div & Button
+  let div = document.createElement("div");
+  let but = document.createElement("button");
+  //Create Text 
+  let divText = document.createTextNode(`Game Over, The Word Is ${randomValueName}`);
+  let butText = document.createTextNode('Try Again')
+//Append Text To Div & Button 
+div.appendChild(divText);
+but.appendChild(butText);
+//Appen The Button To Div
+div.appendChild(but);
+//Add Class On Div & Button 
+div.className = 'popup';
+but.className = 'but'
+
+//Append To The Body 
+document.body.appendChild(div);
+
+//Butoon Event 
+but.addEventListener('click',(e)=>{
+  location.reload()
+})
+}
+
+function won(){
+  let div = document.createElement("div");
+  let but = document.createElement("button");
+  //Create Text 
+  let divText = document.createTextNode(`Congratulations, you won!`);
+  let butText = document.createTextNode('Continue')
+//Append Text To Div & Button 
+div.appendChild(divText);
+but.appendChild(butText);
+//Appen The Button To Div
+div.appendChild(but);
+//Add Class On Div & Button 
+div.className = 'popup';
+but.className = 'but'
+
+//Append To The Body 
+document.body.appendChild(div);
+
+//Butoon Event 
+but.addEventListener('click',(e)=>{
+  location.reload()
+})
+}

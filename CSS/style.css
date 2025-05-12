@@ -183,9 +183,11 @@ hr {
 
 .letters {
   flex: 1;
-  /* background-color:#f8f8f8; */
   padding: 15px;
   text-align: center;
+}
+.letters.finished {
+  pointer-events: none;
 }
 .letters .letter-box {
   width: 55px;
@@ -242,4 +244,28 @@ hr {
   background-color: #222;
   opacity: 0.2;
   pointer-events: none;
+}
+.popup{
+  position: fixed;
+  background-color: #009688;
+  padding: 100px 20px;
+  width: 60%;
+  top: 10%;
+  left: 20%;
+  text-align: center;
+  font-size: 40px;
+  border: 1px solid #ccc;
+  color: #FFF;
+}
+.popup .but{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: #e91e63;
+  color: #FFF;
+  padding: 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
 }
