@@ -28,7 +28,7 @@ lettersArray.forEach((letter) => {
 //Object Of Words + Categories
 async function getData() {
   try {
-    const response = await fetch('hangman_words.json');
+    const response = await fetch("hangman_words.json");
     const data = await response.json();
     //Get Random Property
     let allKeys = Object.keys(data);
@@ -43,7 +43,8 @@ async function getData() {
     //The Chosen Word
     let randomValueName = randomPropValue[randomValueNumber];
     //Set Category Info
-    document.querySelector(".game-info .category span").innerHTML = randomPropName;
+    document.querySelector(".game-info .category span").innerHTML =
+      randomPropName;
     //Select Letters Guess Element
     let lettersGuessContainer = document.querySelector(".letters-guess");
     //Convert Chosen Word To Array
@@ -56,13 +57,13 @@ async function getData() {
       if (letter === " ") {
         // Add Class To The Span
         emptySpan.className = "With-Space";
-        emptySpan.classList.add("done")
+        emptySpan.classList.add("done");
       }
       //Append Span To The Letters Guess Cotainer
       lettersGuessContainer.appendChild(emptySpan);
     });
     //Select Guess Spans
-    let guessSpans = document.querySelectorAll(".letters-guess span")
+    let guessSpans = document.querySelectorAll(".letters-guess span");
 
     //Set Wrong Attempts
     let wrongAttempts = 0;
@@ -70,28 +71,27 @@ async function getData() {
     //Select The Draw Element
     let theDraw = document.querySelector(".hangman-draw");
 
-    // Hedle Clicking On Letters 
+    // Hedle Clicking On Letters
     document.addEventListener("click", (e) => {
-
       // Set The Chose Status
       let theStatus = false;
 
       if (e.target.className === "letter-box") {
         e.target.classList.add("clicked");
-        //Get Clicked Letter 
+        //Get Clicked Letter
         let theClickedLetter = e.target.innerHTML.toLowerCase();
         //The Chosen Word
         let theChoseWord = Array.from(randomValueName.toLowerCase());
         theChoseWord.forEach((wordLetter, WordIndex) => {
-          //If The Clicked Letter Equal To One Of The Chosen Word Letter 
+          //If The Clicked Letter Equal To One Of The Chosen Word Letter
           if (theClickedLetter == wordLetter) {
-            //Set Status To Correct 
+            //Set Status To Correct
             theStatus = true;
             //Loop On All Guess Spans
             guessSpans.forEach((span, SpanIndex) => {
               if (WordIndex === SpanIndex) {
                 span.innerHTML = wordLetter;
-                span.classList.add("done")
+                span.classList.add("done");
               }
             });
           }
@@ -100,7 +100,7 @@ async function getData() {
         if (theStatus !== true) {
           // Increase The Wrong Attempts
           wrongAttempts++;
-          //Add Class Wrong On The Draw Element 
+          //Add Class Wrong On The Draw Element
           theDraw.classList.add(`wrong-${wrongAttempts}`);
           // Play Fail Sound
           document.getElementById("fail").play();
@@ -111,74 +111,74 @@ async function getData() {
         } else {
           // Play Success Sound
           document.getElementById("success").play();
-          let doneSpan = document.querySelectorAll(".letters-guess .done")
+          let doneSpan = document.querySelectorAll(".letters-guess .done");
           if (doneSpan.length === randomValueName.length) {
             won();
           }
         }
       }
-    })
+    });
 
-    // End Game Function 
+    // End Game Function
     function enGame() {
       //Create Popup Div & Button
       let div = document.createElement("div");
       let but = document.createElement("button");
-      let wordSpan = document.createElement('span');
-      //Create Text 
-      let spanText = document.createTextNode(`${randomValueName}`)
+      let wordSpan = document.createElement("span");
+      //Create Text
+      let spanText = document.createTextNode(`${randomValueName}`);
       let divText = document.createTextNode(`Game Over, The Word Is `);
-      let butText = document.createTextNode('Try Again')
-      //Append Text To Div & Button 
+      let butText = document.createTextNode("Try Again");
+      //Append Text To Div & Button
       div.appendChild(divText);
       but.appendChild(butText);
-      wordSpan.appendChild(spanText)
+      wordSpan.appendChild(spanText);
       //Appen The Button To Div
       div.appendChild(wordSpan);
       div.appendChild(but);
 
-      //Add Class On Div & Button 
-      div.className = 'popup';
-      but.className = 'but';
-      wordSpan.className = 'correct-word'
+      //Add Class On Div & Button
+      div.className = "popup";
+      but.className = "but";
+      wordSpan.className = "correct-word";
 
-      //Append To The Body 
+      //Append To The Body
       document.body.appendChild(div);
 
-      //Butoon Event 
-      but.addEventListener('click', (e) => {
-        location.reload()
-      })
+      //Butoon Event
+      but.addEventListener("click", (e) => {
+        location.reload();
+      });
     }
 
     function won() {
       let div = document.createElement("div");
       let but = document.createElement("button");
-      //Create Text 
-      let divText = document.createTextNode(`Congratulations, you won! ${wrongAttempts} wrongs`);
-      let butText = document.createTextNode('Continue')
-      //Append Text To Div & Button 
+      //Create Text
+      let divText = document.createTextNode(
+        `Congratulations, you won! ${wrongAttempts} wrongs`
+      );
+      let butText = document.createTextNode("Continue");
+      //Append Text To Div & Button
       div.appendChild(divText);
       but.appendChild(butText);
       //Appen The Button To Div
       div.appendChild(but);
-      //Add Class On Div & Button 
-      div.className = 'popup';
-      but.className = 'but'
+      //Add Class On Div & Button
+      div.className = "popup";
+      but.className = "but";
 
-      //Append To The Body 
+      //Append To The Body
       document.body.appendChild(div);
 
-      //Butoon Event 
-      but.addEventListener('click', (e) => {
-        location.reload()
-      })
+      //Butoon Event
+      but.addEventListener("click", (e) => {
+        location.reload();
+      });
     }
-
-  }
-  catch {
-    console.error('Error:', error);
+  } catch {
+    console.error("Error:", error);
   }
 }
 
-getData()
+getData();
