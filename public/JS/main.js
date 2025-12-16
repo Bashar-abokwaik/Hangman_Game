@@ -14,7 +14,7 @@ lettersArray.forEach((letter) => {
 async function getData() {
   try {
     // Fetch words data
-    const response = await fetch("hangman_words.json");
+    const response = await fetch("../hangman_words.json");
     const data = await response.json();
 
     // Pick random category
