@@ -1,182 +1,119 @@
-//Letters
+// Generate alphabet letters
 const letters = "abcdefghijklmnopqrstuvwxyz";
+const lettersArray = Array.from(letters);
+const lettersContainer = document.querySelector(".letters");
 
-//Get Array From Letters
-let lettersArray = Array.from(letters);
-
-//Select Letters Container
-let lettersContainer = document.querySelector(".letters");
-
-//Generat Letters
+// Render letters buttons
 lettersArray.forEach((letter) => {
-  //Create Span
-  let span = document.createElement("span");
-
-  //Create Letter Text Node
-  let theLatter = document.createTextNode(letter);
-
-  //Append the Letter To Span
-  span.appendChild(theLatter);
-
-  //Add Class On Span
+  const span = document.createElement("span");
+  span.textContent = letter;
   span.className = "letter-box";
-
-  //Append Span To The Letters Container
   lettersContainer.appendChild(span);
 });
 
-//Object Of Words + Categories
 async function getData() {
   try {
+    // Fetch words data
     const response = await fetch("hangman_words.json");
     const data = await response.json();
-    //Get Random Property
-    let allKeys = Object.keys(data);
-    //Random Number Depend On Keys Length
-    let randomPropNumber = Math.floor(Math.random() * allKeys.length);
-    //Category
-    let randomPropName = allKeys[randomPropNumber];
-    //Category Words
-    let randomPropValue = data[randomPropName];
-    //Random Number Depend On Words
-    let randomValueNumber = Math.floor(Math.random() * randomPropValue.length);
-    //The Chosen Word
-    let randomValueName = randomPropValue[randomValueNumber];
-    //Set Category Info
+
+    // Pick random category
+    const allKeys = Object.keys(data);
+    const randomPropName = allKeys[Math.floor(Math.random() * allKeys.length)];
+
+    // Pick random word from category
+    const randomValueName =
+      data[randomPropName][
+        Math.floor(Math.random() * data[randomPropName].length)
+      ];
+
+    // Display category name
     document.querySelector(".game-info .category span").innerHTML =
       randomPropName;
-    //Select Letters Guess Element
-    let lettersGuessContainer = document.querySelector(".letters-guess");
-    //Convert Chosen Word To Array
-    let lettersAndSpace = Array.from(randomValueName);
-    //Create Spans Depened On Word
-    lettersAndSpace.forEach((letter) => {
-      //Create Empty Span
-      let emptySpan = document.createElement("span");
-      //If Letter is Space
-      if (letter === " ") {
-        // Add Class To The Span
-        emptySpan.className = "With-Space";
-        emptySpan.classList.add("done");
-      }
-      //Append Span To The Letters Guess Cotainer
-      lettersGuessContainer.appendChild(emptySpan);
+
+    // Create guess placeholders
+    const lettersGuessContainer = document.querySelector(".letters-guess");
+    Array.from(randomValueName).forEach((letter) => {
+      const span = document.createElement("span");
+      if (letter === " ") span.classList.add("With-Space", "done");
+      lettersGuessContainer.appendChild(span);
     });
-    //Select Guess Spans
-    let guessSpans = document.querySelectorAll(".letters-guess span");
 
-    //Set Wrong Attempts
+    const guessSpans = document.querySelectorAll(".letters-guess span");
     let wrongAttempts = 0;
+    const theDraw = document.querySelector(".hangman-draw");
 
-    //Select The Draw Element
-    let theDraw = document.querySelector(".hangman-draw");
-
-    // Hedle Clicking On Letters
+    // Handle letter clicks
     document.addEventListener("click", (e) => {
-      // Set The Chose Status
-      let theStatus = false;
+      if (!e.target.classList.contains("letter-box")) return;
 
-      if (e.target.className === "letter-box") {
-        e.target.classList.add("clicked");
-        //Get Clicked Letter
-        let theClickedLetter = e.target.innerHTML.toLowerCase();
-        //The Chosen Word
-        let theChoseWord = Array.from(randomValueName.toLowerCase());
-        theChoseWord.forEach((wordLetter, WordIndex) => {
-          //If The Clicked Letter Equal To One Of The Chosen Word Letter
-          if (theClickedLetter == wordLetter) {
-            //Set Status To Correct
-            theStatus = true;
-            //Loop On All Guess Spans
-            guessSpans.forEach((span, SpanIndex) => {
-              if (WordIndex === SpanIndex) {
-                span.innerHTML = wordLetter;
-                span.classList.add("done");
-              }
-            });
-          }
-        });
-        //If Letter Is Wrong
-        if (theStatus !== true) {
-          // Increase The Wrong Attempts
-          wrongAttempts++;
-          //Add Class Wrong On The Draw Element
-          theDraw.classList.add(`wrong-${wrongAttempts}`);
-          // Play Fail Sound
-          document.getElementById("fail").play();
-          if (wrongAttempts === 8) {
-            enGame();
-            lettersContainer.classList.add("finished");
-          }
-        } else {
-          // Play Success Sound
-          document.getElementById("success").play();
-          let doneSpan = document.querySelectorAll(".letters-guess .done");
-          if (doneSpan.length === randomValueName.length) {
-            won();
-          }
+      e.target.classList.add("clicked");
+      const clickedLetter = e.target.textContent.toLowerCase();
+      let isCorrect = false;
+
+      // Check if clicked letter is in the word
+      Array.from(randomValueName.toLowerCase()).forEach((letter, index) => {
+        // Reveal correct letters
+        if (letter === clickedLetter) {
+          isCorrect = true;
+          guessSpans[index].textContent = letter;
+          guessSpans[index].classList.add("done");
+        }
+      });
+
+      // Handle wrong attempts
+      if (!isCorrect) {
+        wrongAttempts++;
+        theDraw.classList.add(`wrong-${wrongAttempts}`);
+        document.getElementById("fail").play();
+
+        // Check for game over
+        if (wrongAttempts === 8) {
+          endGame();
+          lettersContainer.classList.add("finished");
+        }
+      } else {
+        document.getElementById("success").play();
+        if (
+          document.querySelectorAll(".letters-guess .done").length ===
+          randomValueName.length
+        ) {
+          winGame();
         }
       }
     });
 
-    // End Game Function
-    function enGame() {
-      //Create Popup Div & Button
-      let div = document.createElement("div");
-      let but = document.createElement("button");
-      let wordSpan = document.createElement("span");
-      //Create Text
-      let spanText = document.createTextNode(`${randomValueName}`);
-      let divText = document.createTextNode(`Game Over, The Word Is `);
-      let butText = document.createTextNode("Try Again");
-      //Append Text To Div & Button
-      div.appendChild(divText);
-      but.appendChild(butText);
-      wordSpan.appendChild(spanText);
-      //Appen The Button To Div
-      div.appendChild(wordSpan);
-      div.appendChild(but);
-
-      //Add Class On Div & Button
+    // Lose popup
+    function endGame() {
+      const div = document.createElement("div");
       div.className = "popup";
-      but.className = "but";
-      wordSpan.className = "correct-word";
+      div.innerHTML = `Game Over, The Word Is <span class="correct-word">${randomValueName}</span>`;
 
-      //Append To The Body
+      const btn = document.createElement("button");
+      btn.className = "but";
+      btn.textContent = "Try Again";
+      btn.onclick = () => location.reload();
+
+      div.appendChild(btn);
       document.body.appendChild(div);
-
-      //Butoon Event
-      but.addEventListener("click", (e) => {
-        location.reload();
-      });
     }
 
-    function won() {
-      let div = document.createElement("div");
-      let but = document.createElement("button");
-      //Create Text
-      let divText = document.createTextNode(
-        `Congratulations, you won! ${wrongAttempts} wrongs`
-      );
-      let butText = document.createTextNode("Continue");
-      //Append Text To Div & Button
-      div.appendChild(divText);
-      but.appendChild(butText);
-      //Appen The Button To Div
-      div.appendChild(but);
-      //Add Class On Div & Button
+    // Win popup
+    function winGame() {
+      const div = document.createElement("div");
       div.className = "popup";
-      but.className = "but";
+      div.innerHTML = `Congratulations, you won! ${wrongAttempts} wrongs`;
 
-      //Append To The Body
+      const btn = document.createElement("button");
+      btn.className = "but";
+      btn.textContent = "Continue";
+      btn.onclick = () => location.reload();
+
+      div.appendChild(btn);
       document.body.appendChild(div);
-
-      //Butoon Event
-      but.addEventListener("click", (e) => {
-        location.reload();
-      });
     }
-  } catch {
+    // End of try block
+  } catch (error) {
     console.error("Error:", error);
   }
 }
